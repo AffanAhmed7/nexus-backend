@@ -1,0 +1,182 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/* =========================
+   ENUMS
+========================= */
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  BACKLOG
+  TODO
+  IN_PROGRESS
+  IN_REVIEW
+  DONE
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+/* =========================
+   MODELS
+========================= */
+
+model User {
+  id        String  @id @default(uuid())
+  email     String  @unique
+  password  String?
+  googleId  String? @unique
+  name      String
+  avatarUrl String?
+  role      Role    @default(MEMBER)
+
+  workspaces      WorkspaceMember[]
+  ownedWorkspaces Workspace[] @relation("WorkspaceOwner")
+  tasks           Task[]      @relation("AssignedTasks")
+  comments        Comment[]
+  auditLogs       AuditLog[]
+  notifications   Notification[]
+  createdTasks    Task[]      @relation("CreatedTasks")
+
+  notificationPrefs Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Workspace {
+  id          String @id @default(uuid())
+  name        String
+  description String?
+
+  ownerId String
+  owner   User @relation("WorkspaceOwner", fields: [ownerId], references: [id])
+
+  members  WorkspaceMember[]
+  projects Project[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model WorkspaceMember {
+  id          String           @id @default(uuid())
+  workspaceId String
+  userId      String
+  role        Role             @default(MEMBER)
+  status      InvitationStatus @default(ACCEPTED)
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([workspaceId, userId])
+}
+
+model Project {
+  id          String @id @default(uuid())
+  name        String
+  description String?
+
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  tasks Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id          String     @id @default(uuid())
+  title       String
+  description String?
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  dueDate     DateTime?
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  assigneeId String?
+  assignee   User? @relation("AssignedTasks", fields: [assigneeId], references: [id])
+
+  creatorId String
+  creator   User   @relation("CreatedTasks", fields: [creatorId], references: [id])
+
+  labels    String[]
+  comments  Comment[]
+  auditLogs AuditLog[]
+
+  position  Int     @default(0)
+  isDeleted Boolean @default(false)
+  isArchived Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Comment {
+  id   String @id @default(uuid())
+  text String
+
+  taskId String
+  task   Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  authorId String
+  author   User @relation(fields: [authorId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id      String @id @default(uuid())
+  action  String
+  details String?
+
+  userId String
+  user   User @relation(fields: [userId], references: [id])
+
+  taskId String?
+  task   Task? @relation(fields: [taskId], references: [id])
+
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id      String @id @default(uuid())
+  type    String
+  title   String
+  message String
+
+  isRead Boolean @default(false)
+
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  link String?
+
+  createdAt DateTime @default(now())
+}

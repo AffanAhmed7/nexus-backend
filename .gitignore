@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment variables and secrets
+.env
+.env.*
+serviceAccountKey.json
+
+# User uploads
+uploads/*
+!uploads/.gitkeep
+
+# Logs and Debugging
+*.log
+tsc_errors.txt
+server_out.txt
+seed_fail.log
+seed_output.log
+
+# Diagnostic/Dev scripts
+diagnose_db.ts
+
+# Prisma
+/generated/prisma
+/src/generated/prisma

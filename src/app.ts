@@ -39,6 +39,11 @@ const authLimiter = rateLimit({
 
 // Middleware
 app.use(helmet());
+app.use((req, res, next) => {
+    console.log(`[CORS Debug] Request Method: ${req.method}, Origin: ${req.headers.origin}`);
+    console.log(`[CORS Debug] ALLOWED_ORIGINS env: "${process.env.ALLOWED_ORIGINS}"`);
+    next();
+});
 app.use(cors({
     origin: process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(item => item.trim()) : ['http://localhost:5173', 'http://localhost:3000'],
     credentials: true,

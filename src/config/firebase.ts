@@ -1,27 +1,27 @@
 import admin from 'firebase-admin';
 import dotenv from 'dotenv';
-
-dotenv.config();
-
-// Initialize Firebase Admin
-// Ideally, you should use a service account key file or environment variables
-// For now, we will try to use the default application credentials or environment variables
-// If the user hasn't provided credentials, this might fail or warn.
-
-const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS || './serviceAccountKey.json';
 import fs from 'fs';
 import path from 'path';
+
+dotenv.config();
 
 if (!admin.apps.length) {
     try {
         let credential;
-        // Check if serviceAccountKey.json exists locally if env var not set
-        const localKeyPath = path.resolve(process.cwd(), 'serviceAccountKey.json');
 
-        if (fs.existsSync(localKeyPath)) {
-            credential = admin.credential.cert(localKeyPath);
-        } else {
-            credential = admin.credential.applicationDefault();
+        // Priority 1: FIREBASE_SERVICE_ACCOUNT env var (for production/Render)
+        if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+            const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+            credential = admin.credential.cert(serviceAccount);
+        }
+        // Priority 2: Local serviceAccountKey.json file (for local dev)
+        else {
+            const localKeyPath = path.resolve(process.cwd(), 'serviceAccountKey.json');
+            if (fs.existsSync(localKeyPath)) {
+                credential = admin.credential.cert(localKeyPath);
+            } else {
+                credential = admin.credential.applicationDefault();
+            }
         }
 
         admin.initializeApp({ credential });
@@ -31,3 +31,4 @@ if (!admin.apps.length) {
 }
 
 export default admin;
+

@@ -5,7 +5,7 @@ let io: Server;
 
 export const initSocket = (server: HttpServer): Server => {
     const allowedOrigins = process.env.ALLOWED_ORIGINS
-        ? process.env.ALLOWED_ORIGINS.split(',').map(item => item.trim())
+        ? process.env.ALLOWED_ORIGINS.split(',').map(item => item.trim().replace(/\/$/, ''))
         : ["http://localhost:5173", "http://localhost:3000", "http://127.0.0.1:5173"];
 
     io = new Server(server, {

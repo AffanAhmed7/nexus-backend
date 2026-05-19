@@ -82,7 +82,7 @@ export const getTaskComments = async (req: AuthRequest, res: Response) => {
 };
 
 export const deleteComment = async (req: AuthRequest, res: Response) => {
-    const { commentId } = req.params;
+    const { commentId } = req.params as { commentId: string };
     const userId = req.user?.id;
 
     if (!userId) return res.status(401).json({ message: 'Unauthorized' });

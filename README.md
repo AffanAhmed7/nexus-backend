@@ -1,4 +1,4 @@
-# Nexus Backend Server 🖥️
+# Nexus Backend Server 
 
 Nexus is a premium, enterprise-grade task management platform built for modern product development teams. This repository contains the **Express & Node.js backend server**, which powers the Nexus RESTful API, authentication system, PostgreSQL database storage via Prisma ORM, and real-time WebSockets synchronization via Socket.io.
 
@@ -10,18 +10,18 @@ Nexus is a premium, enterprise-grade task management platform built for modern p
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
-- **🔐 Robust Authentication**: Secure JWT-based authentication featuring short-lived access tokens and secure, HTTP-only refresh tokens.
-- **🛡️ Access Controls**: Role-based access controls (RBAC) ensuring appropriate permissions for Workspace Admins, Project Managers, and team members.
-- **🔄 Database Audit Log**: Mutation tracking audit logs mapping every database transaction to the originating user, operation type, and target entity.
-- **🔌 Real-time Updates**: Dual-channel websocket streaming (Socket.io) to push task adjustments, comments, and project updates instantly to connected clients.
-- **🔎 Global Searching**: Fast full-text indexes across projects, workspaces, and tasks using backend query constructs.
-- **🗑️ Soft Delete Pattern**: Transparent deletion recovery protection ensuring tasks can be archived and restored rather than permanently hard deleted.
+- ** Robust Authentication**: Secure JWT-based authentication featuring short-lived access tokens and secure, HTTP-only refresh tokens.
+- ** Access Controls**: Role-based access controls (RBAC) ensuring appropriate permissions for Workspace Admins, Project Managers, and team members.
+- ** Database Audit Log**: Mutation tracking audit logs mapping every database transaction to the originating user, operation type, and target entity.
+- ** Real-time Updates**: Dual-channel websocket streaming (Socket.io) to push task adjustments, comments, and project updates instantly to connected clients.
+- ** Global Searching**: Fast full-text indexes across projects, workspaces, and tasks using backend query constructs.
+- ** Soft Delete Pattern**: Transparent deletion recovery protection ensuring tasks can be archived and restored rather than permanently hard deleted.
 
 ---
 
-## 🛠️ Tech Stack & Dependencies
+##  Tech Stack & Dependencies
 
 - **Platform**: Node.js, Express, TypeScript
 - **Database ORM**: Prisma ORM with PostgreSQL driver
@@ -31,7 +31,7 @@ Nexus is a premium, enterprise-grade task management platform built for modern p
 
 ---
 
-## 📁 Directory Structure
+##  Directory Structure
 
 ```text
 backend/
@@ -51,7 +51,7 @@ backend/
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 1. Prerequisites
 Ensure you have **Node.js** (v18+), **PostgreSQL** (v15+) running locally or remotely, and **npm** installed.
